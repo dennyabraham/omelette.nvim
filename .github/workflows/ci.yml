@@ -8,17 +8,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        neovim: [stable, v0.11.0]
     steps:
       - uses: actions/checkout@v4
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
-          version: stable
+          version: ${{ matrix.neovim }}
       - uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: "5.4"
       - uses: leafo/gh-actions-luarocks@v4
       - name: Install omelette
-        run: luarocks install omelette 0.2.0
+        run: luarocks install omelette 0.3.0
       - name: Run the tests
         run: nvim --clean --headless -l tests/run.lua

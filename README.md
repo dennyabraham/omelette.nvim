@@ -5,14 +5,22 @@ files).
 
 - Sets the file type `omelette` for `*.egg`.
 - Sets `commentstring` to `-- %s` and indents with 2 spaces.
-- Starts the Omelette language server, `omelette lsp`, for diagnostics and
-  highlighting. Highlighting comes from the server's semantic tokens; the plugin has
-  no syntax file, so a file has no colour until the server is running.
+- Colors keywords, strings, numbers, comments and constructors with a small syntax
+  file, so a file has color without the language server.
+- Starts the Omelette language server, `omelette lsp`, which gives:
+  - diagnostics as you type;
+  - highlighting by what each name refers to, drawn over the syntax file's colors;
+  - hover (`K`): a name's type, or a type's declaration;
+  - go to definition (`CTRL-]`), within the same file;
+  - the file's outline (`gO`).
+
+See `:help omelette`.
 
 ## Requirements
 
 - Neovim 0.11 or later.
-- `omelette` 0.2.0 or later on your `PATH`: `luarocks install omelette`.
+- `omelette` on your `PATH`: `luarocks install omelette`. Diagnostics and highlighting
+  need 0.2.0 or later; hover, go to definition and the outline need 0.3.0 or later.
 
 ## Install
 
@@ -30,7 +38,8 @@ To change the server settings, override them with `vim.lsp.config("omelette", { 
 nvim --clean --headless -l tests/run.lua
 ```
 
-The attach test skips unless an `omelette` with the `lsp` command is on `PATH`.
+The server tests skip unless an `omelette` with the `lsp` command is on `PATH`, and
+the hover test skips for an `omelette` older than 0.3.0.
 
 ## Design
 
