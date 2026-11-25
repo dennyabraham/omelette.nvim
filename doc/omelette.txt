@@ -1,0 +1,55 @@
+*omelette.txt*  Neovim support for the Omelette language
+
+==============================================================================
+CONTENTS                                                      *omelette*
+
+  1. What it does ............................ |omelette-features|
+  2. Requirements ............................ |omelette-requirements|
+  3. Settings ................................ |omelette-settings|
+
+Omelette is a small ML that compiles to Lua: https://github.com/dennyabraham/omelette-lang
+
+==============================================================================
+1. WHAT IT DOES                                         *omelette-features*
+
+- Files ending in `.egg` get the file type `omelette`.
+- In those buffers 'commentstring' is `-- %s`, and indentation is 2 spaces
+  ('shiftwidth', 'expandtab', 'autoindent').
+- A syntax file colors keywords, strings, numbers, comments and constructors,
+  so a file has color without the language server.
+- The language server, `omelette lsp`, starts for each Omelette buffer. It
+  gives:
+  - diagnostics as you type;
+  - highlighting by what each name refers to (semantic tokens), drawn over
+    the syntax file's colors;
+  - hover (|vim.lsp.buf.hover()|, `K` by default): a name's type, or a type's
+    declaration;
+  - go to definition (|vim.lsp.buf.definition()|, `CTRL-]` by default);
+  - the file's outline (|vim.lsp.buf.document_symbol()|, `gO` by default).
+
+Definitions are found within the same file only.
+
+==============================================================================
+2. REQUIREMENTS                                     *omelette-requirements*
+
+- Neovim 0.11 or later.
+- `omelette` on your `PATH`: `luarocks install omelette`.
+  - 0.2.0 or later for diagnostics and highlighting.
+  - 0.3.0 or later for hover, go to definition and the outline.
+
+==============================================================================
+3. SETTINGS                                             *omelette-settings*
+
+The server is configured as `omelette` with |vim.lsp.config()|. Its defaults:
+>lua
+    cmd = { "omelette", "lsp" }
+    filetypes = { "omelette" }
+    root_markers = { ".git" }
+<
+To change them, for example to run an `omelette` that is not on `PATH`:
+>lua
+    vim.lsp.config("omelette", { cmd = { "/path/to/omelette", "lsp" } })
+<
+To stop the server from starting, call `vim.lsp.enable("omelette", false)`.
+
+ vim:tw=78:ts=8:ft=help:norl:
